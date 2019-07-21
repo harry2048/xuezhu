@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>注册</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/rem-config.js"></script>
+    <script src="../js/main.js"></script>
+
+</head>
+<body>
+<form method="post">
+    <div class="l_ruturn">
+        <a href="mine.html">
+            <img src="../images/retuen.png" alt="">
+        </a>
+    </div>
+    <div class="l_title">
+        <p>注册</p>
+    </div>
+    <div class="l_content">
+        <div class="l_phone">
+            <p>手机号</p>
+            <input type="phone" placeholder="请输入手机号" class="reg_phone">
+        </div>
+        <div class="l_phone">
+            <p>验证码</p>
+            <!--<div class="l_yz_num">
+                <input type="text" placeholder="请输入验证码" class="reg_yzm">
+                <button id="huoqu_yzm">获取验证码</button>
+                <div class="clear"></div>
+            </div>-->
+            <div class="yz_num">
+                <input type="text" placeholder="请输入验证码" class="reg_yzm">
+                <input type="button" id="huoqu_yzm" value="获取验证码">
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="reg_num">
+            <ul>
+                <li>
+                    <input type="password" placeholder="请输入6-32位数字字母组合,数字不能开头" class="reg_pwd">
+                </li>
+                <li>
+                    <input type="password" placeholder="请再次输入上面密码" class="reg_qpwd">
+                </li>
+            </ul>
+        </div>
+    </div>
+    <a href="javascript:;" style="color:#FFF">
+        <div class="l_loginbtn">
+            提 交
+        </div>
+    </a>
+</form>
+<div class="msg"></div>
+</body>
+<script src="../js/jquery.js"></script>
+<script>
+    $(function () {
+        // 判断是否为空,并正则验证
+        $(".reg_phone").blur(function () {
+            if ($(this).val() == "") {
+                $(".msg").show().text("不能为空");
+                $(this).focus();
+                setTimeout(function () {
+                    $(".msg").hide("slow")
+                }, 2000)
+
+                return false;
+            } else {
+                var _phone = $(this).val();
+                // ([0-9]{4})
+                var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+                if (!myreg.test(_phone)) {
+                    $(".msg").show().text("手机号不合法");
+                    setTimeout(function () {
+                        $(".msg").hide("slow")
+                    }, 2000);
+                    $(this).focus();
+                }
+            }
+        });
+        $(".reg_yzm").blur(function () {
+            if ($(this).val() == "") {
+                $(".msg").show().text("不能为空");
+                $(this).focus();
+                setTimeout(function () {
+                    $(".msg").hide("slow")
+                }, 2000)
+
+                return false;
+            } else {
+                var _yzm = $(this).val();
+                var myreg = /^\d{4}$/;
+                if (!myreg.test(_yzm)) {
+                    $(".msg").show().text("验证码不合法");
+                    setTimeout(function () {
+                        $(".msg").hide("slow")
+                    }, 2000);
+                    $(this).focus();
+                }
+            }
+        });
+        $('.reg_pwd').blur(function () {
+            if ($(this).val() == "") {
+                $('.msg').show().text("密码不能为空")
+                $(this).foucs();
+                setTimeout(function () {
+                    $('.msg').hide("slow")
+                }, 2000)
+                return false;
+            } else {
+                var _pwd = $(this).val()
+                var myreg = /^[a-zA-Z]\w{5,31}$/;
+                if (!myreg.test(_pwd)) {
+                    $('.msg').show().text("密码不合法");
+                    setTimeout(function () {
+                        $('.msg').hide("slow")
+
+                    }, 2000)
+                    $(this).focus();
+                }
+            }
+        });
+        $('.reg_qpwd').blur(function () {
+            if ($(this).val() !== $('.reg_pwd').val()) {
+                $('.msg').show().text("密码和上面不一样")
+                $(this).focus()
+                setTimeout(function () {
+                    $('.msg').hide("slow")
+                }, 2000)
+                return false;
+
+            }
+        })
+        // 获取验证码
+        $("#huoqu_yzm").click(function () {
+            var iphone = $(".reg_phone").val();
+            if(iphone == "") {
+                alert("电话号码不能为空！")
+                return false;
+            }
+            $.ajax({
+                url: appPath+"getVerificationCode",
+                data: {"iphone":iphone},
+                dataType: 'json',//服务器返回json格式数据
+                type: 'GET',//HTTP请求类型
+                success: function (data) {
+                    if (data.success) {
+                        $(".msg").show().text("验证码发送成功！");
+                    } else {
+                        $(".msg").show().text("验证码发送失败，请重新发送！");
+                    }
+                }
+            })
+        })
+
+        // 添加点击事件
+        $(".l_loginbtn").click(function () {
+            var _phone = $(".reg_phone").val();
+            var _yzm = $(".reg_yzm").val();
+            var _pwd = $(".reg_pwd").val();
+            var _qpwd = $(".reg_qpwd").val();
+            var _data = {
+                "iphone": _phone,
+                "verificationCode": _yzm,
+                "userPwd": _pwd,
+                "confirmPwd": _qpwd
+            }
+            $.ajax({
+                url: appPath+"register",
+                data: JSON.stringify(_data),
+                contentType: "application/json;charset=utf-8",
+                dataType: 'json',//服务器返回json格式数据
+                type: 'post',//HTTP请求类型
+                success: function (data) {
+                    if (data.success) {
+                        $(".msg").show().text("注册成功！1秒后跳转页面");
+                        setTimeout(function () {
+                            window.location.href = "login.html";
+                        }, 1000);
+
+
+                    } else {
+                        if (data.loginStatus == false) {
+                            $(".msg").show().text("操作失败！" + data.errorMessage + "，即将跳转到登录页面~");
+                            setTimeout(function () {
+                                window.location.href = "login.html";
+                                $(".msg").hide("slow")
+                            }, 2000)
+                        } else {
+                            $(".msg").show().text("操作失败！" + data.errorMessage);
+                            setTimeout(function () {
+                                $(".msg").hide("slow")
+                            }, 2000)
+                        }
+                    }
+                }
+            });
+        })
+    })
+</script>
+</html>

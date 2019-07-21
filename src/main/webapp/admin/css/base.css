@@ -1,0 +1,411 @@
+.login_form{
+	width: 400px;
+	margin: 0 auto;
+	text-align: center;
+}
+.login_div{
+	height: 40px;
+	margin:  10px 0;
+}
+.login_form input{
+	width: 370px;
+	height: 38px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 0 15px;
+}
+.btn{
+	width: 400px;
+	height: 40px;
+	font-size: 14px;
+	text-align: center;
+	line-height: 40px;
+	background: #409eff;
+	color: #fff;
+	border-radius: 5px;
+}
+/*index start*/
+.index_head{
+	height: 100px;
+	background: #a9e2ff;
+	color: #192982;
+}
+.head_info{
+	width: 1200px;
+	margin: 0 auto;
+}
+.index_head img{
+	margin: 21px 0;
+	vertical-align: middle;
+}
+.head_left{
+	float: left;
+	font-size: 36px;
+
+}
+.head_right{
+	float: right;
+	height: 100px;
+	line-height: 100px;
+}
+.main_left{
+	width: 165px;
+	background: #7fcff9;
+	float: left;
+}
+.menu_div{
+	padding: 0 20px;
+	height: 56px;
+	line-height: 56px;
+	cursor: default;
+}
+.second_menu{
+	background: #e8faff;
+	display: none;
+
+}
+.second_menu li{
+	padding: 0 20px;
+	height: 56px;
+	line-height: 56px;
+	cursor: default;
+}
+.second_menu li:hover{
+	background-color: #4aabdc;
+	color: #fff;
+}
+.menu_div .iconfont{
+	float: right;
+}
+.active{
+	color: #409eff;
+}
+.main_right{
+	padding: 10px;
+	margin-left: 165px;
+	overflow: auto;
+}
+.main_right_info{
+	overflow: hidden;
+	margin-bottom: 30px;
+}
+.see_info{
+	text-align: center;
+	cursor: pointer;
+}
+
+.list_info>li{
+	height: 171px;
+	width: 248px;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	box-shadow: 0px 0px 10px #ccc;
+	float: left;
+	margin: 10px;
+}
+.list_info>li>h3{
+	height: 58px;
+	line-height: 58px;
+	text-align: center;
+	font-size: 18px;
+	border-bottom: 1px solid #ccc;
+}
+.list_info>li>div{
+	height: 111px;
+	line-height: 111px;
+	text-align: center;
+	font-size: 26px;
+}
+/*dialog*/
+.dialog,.dialog_bg{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	
+}
+.dialog{
+	z-index: 999;
+	
+}
+.jieshi{
+	display: none;
+}
+.dialog_bg{
+	background: #000;
+	opacity: 0.5;
+	fliter:alpha(opacity=50);
+	-moz-opacity:0.5;
+}
+.dialog_info{
+	position: fixed;
+	width: 635px;
+	height: 204px;
+	top: 50%;
+	left: 50%;
+	margin-left: -327px;
+	margin-top: -102px;
+	background: #fff;
+}
+.dialog_header{
+	height: 64px;
+	line-height: 64px;
+	text-align: center;
+}
+.dialog_header .iconfont{
+	float: right;
+	margin: 0 50px 0 0;
+}
+.dialog_body{
+	color: #606266;
+	padding: 0 20px;
+	
+}
+.dialog_body div{
+	padding: 0 30px; 
+	height: 30px;
+	line-height: 30px;
+}
+
+
+/*修改密码*/
+.pwd_form div{
+	height: 40px;
+	line-height: 40px;
+	margin: 10px 0;
+}
+.pwd_form span{
+	width: 70px;
+	margin-right: 10px;
+	color: #666;
+
+}
+.pwd_form input{
+	width: 500px;
+	height: 38px;
+	padding: 0 15px;
+	border:1px solid #ccc;
+	border-radius: 5px;
+}
+.btn_ok{
+	width: 70px;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+
+	
+}
+
+/*订单管理*/
+.search_form{
+	height: 101px;
+}
+.com_btn{
+	padding: 9px 15px;
+	font-size: 12px;
+	color: #fff;
+	background: #409eff;
+	border-radius: 5px;
+}
+.search_div{
+	float: left;
+	margin: 10px;
+}
+.search_div input{
+	width: 170px;
+	height: 30px;
+	padding: 0 15px;
+	border-radius: 5px;
+	border:1px solid #ccc;
+}
+.date{
+	position: relative;
+}
+.date.search_div input{
+	width: 100px;
+	height: 30px;
+	padding-left: 30px;
+}
+.date .iconfont{
+	color: #ccc;
+	position: absolute;
+	left: 6px;
+	top: 6px;
+}
+.order_table tr{
+	text-align: center;
+}
+.order_table td{
+	height: 59px;
+	color: #666;
+	font-size: 14px;
+
+}
+.order_table .iconfont{
+	font-size: 12px;
+}
+.msg_info{
+	padding: 20px 50px;
+	text-align: left;
+}
+.msg_info li{
+	float: left;
+	width: 50%;
+}
+.title_name{
+	width: 90px;
+	height: 40px;
+	line-height: 40px;
+	padding-right:15px; 
+	color: #99a9bf;
+}
+.order_msg .dialog_info{
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	margin-left: 0;
+	margin-top: 0;
+	overflow: auto;
+}
+.order_name{
+	font-size: 16px;
+}
+.info_msg{
+	padding: 20px;
+}
+.tabs_info td{
+	height: 48px;
+	padding: 0 10px;
+	font-size: 14px;
+}
+.tabs_li{
+	overflow: hidden;
+	margin-bottom: 20px;
+}
+.tabs_li li{
+	float: left;
+	width: 33.33%;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	border-bottom: 2px solid #ccc;
+	font-size: 14px;
+	cursor: default;
+}
+.tabs_li .current{
+	border-bottom: 2px solid #409eff;
+	color: #409eff;
+
+}
+.order_msg{
+	display: none;
+}
+.page{
+	height: 60px;
+	line-height: 60px;
+	font-size: 14px;
+	text-align: center;
+	margin-top: 30px;
+	color: #666;
+}
+.page a{
+	color: #666;
+	padding:5px;
+}
+.page .iconfont{
+	font-size: 12px;
+	vertical-align: middle;
+}
+.page .current{
+	color: #409eff;
+}
+/*保证金*/
+.select .select_span{
+	width: 200px;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 10px;
+	border:1px solid #ccc;
+	border-radius: 5px;
+}
+.place{
+	color: #ccc;
+}
+.select{
+	width: 220px;
+	height: 32px;
+	position: relative;
+}
+.select .iconfont{
+	position: absolute;
+	top: 10px;
+	right: 5px;
+	color: #ccc;
+	font-size: 12px;
+}
+.select_div{
+	position: absolute;
+	top: 45px;
+	width: 213px;
+	height: 88px;
+	display: none;
+
+}
+.select_ul{
+	padding: 10px 0;
+	border:1px solid #ccc;
+	border-radius: 5px;
+	position: relative;
+	background: #fff;
+}
+.select_ul .select_li{
+	height: 34px;
+	line-height: 34px;
+	text-align: center;
+	cursor: default;
+
+}
+.select_ul .select_li:hover{
+	background: #f5f7fa;
+}
+.select_ul .corner,.select_ul .corner1{
+	width: 0px;
+	height: 0px;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-top: 8px solid transparent;
+	border-bottom: 8px solid #fff;
+	position: absolute;
+}
+.select_ul .corner{
+	top: -15px;
+	left: 10px;
+}
+.select_ul .corner1{
+	border-bottom: 8px solid #ccc;
+	top: -16px;
+	left: 10px;
+}
+.money_tabs_li{
+	overflow: hidden;
+	width: 100%;
+	border-bottom: 1px solid #ccc;
+}
+.money_tabs_li li{
+	height: 30px;
+	line-height: 30px;
+	float: left;
+	margin-right: 10px;
+	font-size: 14px;
+	cursor: default;
+}
+.money_tabs_li .current{
+	border-bottom: 1px solid #409eff;
+	color: #409eff;
+}
+.tabs_info table{
+	text-align: center;
+	color: #666;
+}

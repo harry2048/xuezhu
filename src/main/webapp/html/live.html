@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>居住信息</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0,
+		minimum-scale=1.0, user-scalable=no">
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/common.css">
+		
+		<link rel="stylesheet" type="text/css" href="../css/public.css"/>
+		<link rel="stylesheet" href="../css/swiper.min.css">
+		<script src="../js/main.js"></script>
+		<script src="../js/jquery.js"></script>
+		<script src="../js/dyselect.js"></script>
+		<script src="../js/swiper.min.js"></script>
+		<script src="../js/rem-config.js"></script>
+		
+	</head>
+	<body>
+		<div class="tabbar">
+			<a href="mine.html" class="tabbar_r">
+				<img src="../images/x.png" >
+			</a>
+			<span>居住信息</span>
+			<a href="" class="tabbar_c">
+				<img src="../images/caidan.png" alt="">
+			</a>
+			<div class="clear"></div>
+		</div>
+		<div class="f_banner" >
+			<img src="../images/banner.jpg" alt="" >
+		</div>
+		<div class="progress_bar">
+			<div class="yellow"></div>
+			<div class="yellow"></div>
+			<div class="yellow"></div>
+		</div>
+		<div class="phone_content">
+			<ul>
+				<li>
+					<span>婚姻状况</span>
+					<div class="phone_yunying1 btn1">
+						<span class="hunyin">婚姻情况</span>
+						<img src="../images/xiaosanjiao.png" alt="">
+					</div>
+				</li>
+				<li>
+					<span>居住状态</span>
+					<div class="phone_yunying1 btn2">
+						<span class="juzhu">状态</span>
+						<img src="../images/xiaosanjiao.png" alt="">
+					</div>
+				</li>
+				<li>
+					<span>居住年限</span>
+					<div class="phone_yunying1 btn3">
+						<span class="nianxian">年限</span>
+						<img src="../images/xiaosanjiao.png" alt="">
+					</div>
+				</li>
+				<li>
+					<span>现住址</span>
+					<div class="phone_yunying1" >
+						<input type="text" placeholder="省/市/县" id="picker" style="font-size:0.3rem;" class="zhuzhi"/>
+						<img src="../images/xiaosanjiao.png" alt="">
+					</div>
+				</li>
+				
+				<li>
+					<span>详细地址</span>
+					<input type="text" placeholder="您所在地址" class="phone_num">
+				</li>
+			</ul>
+		</div>
+		<div class="btn_box">
+			<div id="pre_btn">上一步</div>
+			<div class="next_btn">下一步</div>
+		</div>
+		<div class="msg"></div>
+		<div class="dialog show1">
+			<div class="dialog_bg"></div>
+			<div class="dialog_info">
+				<ul id="marrSta">
+					<!--<li>java开发工程师</li>
+					<li>java开发工程师</li>
+					<li>java全栈开发工程师</li>-->
+				</ul>
+				<a href="javascript:;" class="dialog_btn show1_cancle">取消</a>
+			</div>
+		</div>
+		<div class="dialog show2">
+			<div class="dialog_bg"></div>
+			<div class="dialog_info">
+				<ul>
+					<!--<li>6+12个月</li>
+					<li>6+18个月</li>
+					<li>12个月</li>-->
+				</ul>
+				<a href="javascript:;" class="dialog_btn show2_cancle">取消</a>
+			</div>
+		</div>
+		<div class="dialog show3">
+			<div class="dialog_bg"></div>
+			<div class="dialog_info">
+				<ul>
+					<!--<li>6+12个月</li>
+					<li>6+18个月</li>
+					<li>12个月</li>-->
+				</ul>
+				<a href="javascript:;" class="dialog_btn show3_cancle">取消</a>
+			</div>
+		</div>
+	</body>
+	<script src="../js/picker.min.js"></script>
+	<script src="../js/city.js"></script>
+	<script src="../js/index1.js"></script>
+	
+	
+	<script>
+		// 下一页点击上一页
+        $(function () {
+            $("#pre_btn").click(function () {
+                window.location.href="movie_data.html";
+            })
+
+            $.ajax({
+                url:appPath+"getLive",
+                contentType: "application/json;charset=utf-8",
+                dataType:'json',//服务器返回json格式数据
+                type:'GET',//HTTP请求类型
+                success:function(data){
+                    if(data.success){
+                        var data = data.data;
+                        $('.hunyin').text(data.maritalStatus);
+                        $('.juzhu').text(data.liveStatus);
+                        $('.nianxian').text(data.liveYear);
+                        $('#picker').val(data.province);
+                        $('.phone_num').val(data.detailedAddress);
+                    }
+                }
+            });
+        })
+
+
+		// 加载三个下拉框
+		$(function () {
+            $.ajax({
+                url:appPath+"hunyinDropdownBox",
+                data:"",
+                dataType:'json',//服务器返回json格式数据
+                type:'GET',//HTTP请求类型
+                success:function(res){
+                    if(res.success){
+                        var _list = res.data;
+                        var _li = "";
+                        for(var i = 0;i<_list.length;i++){
+                            _li+="<li li_id="+_list[i].id+">"+_list[i].name+"</li>";
+
+                        }
+                        $(".dialog.show1 ul").html(_li);
+
+                    }else{
+                        $(".msg").show().text("获取失败！原因"+_res.errorMessage);
+                        setTimeout(function(){
+                            $(".msg").hide("slow")
+                        },2000)
+                    }
+                }
+            });
+
+            $.ajax({
+                url:appPath+"juzhuDropdownBox",
+                data:"",
+                dataType:'json',//服务器返回json格式数据
+                type:'GET',//HTTP请求类型
+                success:function(res){
+                    if(res.success){
+                        var _list = res.data;
+                        var _li = "";
+                        for(var i = 0;i<_list.length;i++){
+                            _li+="<li li_id="+_list[i].id+">"+_list[i].name+"</li>";
+
+                        }
+                        $(".dialog.show2 ul").html(_li);
+
+                    }else{
+                        $(".msg").show().text("获取失败！原因"+_res.errorMessage);
+                        setTimeout(function(){
+                            $(".msg").hide("slow")
+                        },2000)
+                    }
+                }
+            });
+
+            $.ajax({
+                url:appPath+"nianxianDropdownBox",
+                data:"",
+                dataType:'json',//服务器返回json格式数据
+                type:'GET',//HTTP请求类型
+                success:function(res){
+                    if(res.success){
+                        var _list = res.data;
+                        var _li = "";
+                        for(var i = 0;i<_list.length;i++){
+                            _li+="<li li_id="+_list[i].id+">"+_list[i].name+"</li>";
+
+                        }
+                        $(".dialog.show3 ul").html(_li);
+
+                    }else{
+                        $(".msg").show().text("获取失败！原因"+_res.errorMessage);
+                        setTimeout(function(){
+                            $(".msg").hide("slow")
+                        },2000)
+                    }
+                }
+            });
+        })
+
+
+		$(function() {
+			$(".btn1").click(function() {
+				$(".show1").show();
+				/*$.ajax({
+					url:"http://localhost:8080/hunyinDropdownBox",
+					data:"",
+					dataType:'json',//服务器返回json格式数据
+					type:'GET',//HTTP请求类型
+					success:function(res){
+						if(res.success){
+							var _list = res.data;
+							var _li = "";
+							for(var i = 0;i<_list.length;i++){
+								_li+="<li li_id="+_list[i].id+">"+_list[i].name+"</li>";
+								
+							}
+							$(".dialog.show1 ul").html(_li);
+							
+						}else{
+							$(".msg").show().text("获取失败！原因"+_res.errorMessage);
+							setTimeout(function(){
+								$(".msg").hide("slow")
+							},2000)
+						}
+					}
+				});*/
+			})
+			$(".show1_cancle").click(function() {
+				$(".show1").hide();
+			})
+			$('.btn2').click(function() {
+				$(".show2").show();
+				/*$.ajax({
+					url:"http://localhost:8080/juzhuDropdownBox",
+					data:"",
+					dataType:'json',//服务器返回json格式数据
+					type:'GET',//HTTP请求类型
+					success:function(res){
+						if(res.success){
+							var _list = res.data;
+							var _li = "";
+							for(var i = 0;i<_list.length;i++){
+								_li+="<li li_id="+_list[i].id+">"+_list[i].name+"</li>";
+								
+							}
+							$(".dialog.show2 ul").html(_li);
+							
+						}else{
+							$(".msg").show().text("获取失败！原因"+_res.errorMessage);
+							setTimeout(function(){
+								$(".msg").hide("slow")
+							},2000)
+						}
+					}
+				});*/
+			})
+			$('.show2_cancle').click(function() {
+				$(".show2").hide();
+			})
+			$('.btn3').click(function() {
+				$(".show3").show();
+				/*$.ajax({
+					url:"http://localhost:8080/nianxianDropdownBox",
+					data:"",
+					dataType:'json',//服务器返回json格式数据
+					type:'GET',//HTTP请求类型
+					success:function(res){
+						if(res.success){
+							var _list = res.data;
+							var _li = "";
+							for(var i = 0;i<_list.length;i++){
+								_li+="<li li_id="+_list[i].id+">"+_list[i].name+"</li>";
+								
+							}
+							$(".dialog.show3 ul").html(_li);
+							
+						}else{
+							$(".msg").show().text("获取失败！原因"+_res.errorMessage);
+							setTimeout(function(){
+								$(".msg").hide("slow")
+							},2000)
+						}
+					}
+				});*/
+			})
+			$('.show3_cancle').click(function() {
+				$(".show3").hide();
+			})
+			
+			// 获取文字再放上去
+			/*$(".dialog li").click(function() {
+				var li_text = $(this).text();
+				var li_id = $(this).attr("li_id")
+				if ($(this).parent().parent().parent().hasClass("show1")) {
+					$(".btn1 span").text(li_text);
+					$(".btn1 span").attr("li_id",li_id);
+						
+				}else if($(this).parent().parent().parent().hasClass("show2")){
+					$(".btn2 span").text(li_text);
+					$(".btn2 span").attr("li_id",li_id);
+				}else {
+					$(".btn3 span").text(li_text);
+					$(".btn3 span").attr("li_id",li_id);
+					
+				}
+				$(".dialog").hide();
+			})*/
+            $(".dialog").on("click","li",function() {
+                var li_text = $(this).text();
+                var li_id = $(this).attr("li_id")
+                if ($(this).parent().parent().parent().hasClass("show1")) {
+                    $(".btn1 span").text(li_text);
+                    $(".btn1 span").attr("li_id",li_id);
+
+                }else if($(this).parent().parent().parent().hasClass("show2")){
+                    $(".btn2 span").text(li_text);
+                    $(".btn2 span").attr("li_id",li_id);
+                }else {
+                    $(".btn3 span").text(li_text);
+                    $(".btn3 span").attr("li_id",li_id);
+
+                }
+                $(".dialog").hide();
+            })
+			//点击下一步
+			$('.next_btn').click(function(){
+				//验证是否为空
+				if($('.hunyin').text()=="婚姻情况"){
+					$(".msg").show().text("不能为空");
+					setTimeout(function(){
+						$(".msg").hide("slow")
+					},2000)
+					return false;
+				};
+				if($('.juzhu').text()=="状态"){
+					$(".msg").show().text("不能为空");
+					setTimeout(function(){
+						$(".msg").hide("slow")
+					},2000)
+					return false;
+				};
+				if($('.nianxian').text()=="年限"){
+					$(".msg").show().text("不能为空");
+					setTimeout(function(){
+						$(".msg").hide("slow")
+					},2000)
+					return false;
+				};
+				$("#picker").blur(function(){
+					if($(this).val()=="省/市/县"){
+						$(".msg").show().text("不能为空");
+						$(this).focus();
+						setTimeout(function(){
+							$(".msg").hide("slow")
+						},2000)
+						return false;
+					}
+				});
+				$(".phone_num").blur(function(){
+					if($(this).val()=="您所在地址"){
+						$(".msg").show().text("不能为空");
+						$(this).focus();
+						setTimeout(function(){
+							$(".msg").hide("slow")
+						},2000)
+						return false;
+					}
+				});
+				
+				
+				var _hunyin = $('.hunyin').text();
+				var _juzhu = $('.juzhu').text();
+				var _nianxian = $('.nianxian').text();
+				var _zhuzhi = $('#picker').val();
+				// 下拉框id
+				var hunyin = $('.hunyin').attr("li_id");
+				var juzhu = $('.juzhu').attr("li_id");
+				var nianxian = $('.nianxian').attr("li_id");
+				//详细住址
+				var _x_zhuzhi = $('.phone_num').val();
+				var _zhuzhi_arr = _zhuzhi.split(" ");
+				//城市分割
+				var province,city,area;
+				if(_zhuzhi_arr.length = 2){
+					province = _zhuzhi_arr[0];
+					city = _zhuzhi_arr[0];
+					area = _zhuzhi_arr[1]
+				}else{
+					province = _zhuzhi_arr[0];
+					city = _zhuzhi_arr[1];
+					area = _zhuzhi_arr[2]
+				}
+				var _data = {
+
+                    "maritalStatus":hunyin,
+                    "liveStatus":juzhu,
+                    "liveYear":nianxian,
+
+                    "province":_zhuzhi,
+
+                    /*"province":province,
+                    "city":city,
+                    "area":area,*/
+					
+					"detailedAddress":_x_zhuzhi,
+				}
+				$.ajax({
+					url:appPath+"userLive",
+                    data:JSON.stringify(_data),
+                    contentType: "application/json;charset=utf-8",
+					dataType:'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型
+					success:function(data){
+						if(data.success){
+							$('.msg').show().text("成功！1秒后下一步")
+							setTimeout(function(){
+								window.location.href="education.html"
+							},1000)
+						}else{
+                            if(data.loginStatus==false) {
+                                $(".msg").show().text("操作失败！"+data.errorMessage+"，即将跳转到登录页面~");
+                                setTimeout(function(){
+                                    window.location.href="login.html";
+                                    $(".msg").hide("slow")
+                                },2000)
+                            }else {
+                                $(".msg").show().text("操作失败！"+data.errorMessage);
+                                setTimeout(function(){
+                                    $(".msg").hide("slow")
+                                },2000)
+                            }
+						}
+					},
+				});
+				
+			})
+			
+		
+		});
+	</script>
+	
+</html>

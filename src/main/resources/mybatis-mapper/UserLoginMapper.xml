@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zr.xuezhu.userLogin.mapper.UserLoginMapper">
+    <sql id="BaseSql">
+        id,iphone,userName,userPwd,verificationCode,invitationCode,createTime,createName,updateTime,updateName
+    </sql>
+    <insert id="insertIphoneAndCode">
+        INSERT INTO userlogin (iphone,verificationCode,createTime)
+        VALUE (#{iphone},#{verificationCode},now())
+    </insert>
+    <update id="deleteVerifyCode">
+        UPDATE userlogin SET verificationCode = NULL
+    </update>
+    <update id="updateVerifyCodeByIphone" parameterType="java.lang.String">
+        UPDATE userlogin SET verificationCode = NULL WHERE iphone = #{iphone}
+    </update>
+
+    <select id="queryByIphone" parameterType="java.lang.String" resultType="com.zr.xuezhu.userLogin.pojo.UserLogin">
+        SELECT <include refid="BaseSql"/>
+        FROM userlogin
+        WHERE iphone = #{iphone}
+    </select>
+
+    <select id="queryPaydivideStatus" parameterType="java.lang.Integer" resultType="com.zr.xuezhu.paydivide.pojo.PayDivide">
+        SELECT *
+        FROM paydivide
+        WHERE loginId = #{loginId} and payOffStatus=0
+    </select>
+
+    <select id="queryByIphoneAndVericode" parameterType="com.zr.xuezhu.userLogin.pojo.UserLogin" resultType="com.zr.xuezhu.userLogin.pojo.UserLogin">
+        SELECT <include refid="BaseSql"/>
+        FROM userlogin
+        WHERE iphone = #{iphone}
+
+    </select>
+<!-- AND verificationCode=#{verificationCode}-->
+
+    <update id="updateByIphone" parameterType="com.zr.xuezhu.userLogin.pojo.UserLogin">
+        UPDATE userlogin SET userPwd=#{userPwd},
+                             createTime = now(),
+                             updateTime = now()
+        WHERE iphone=#{iphone}
+    </update>
+    <update id="updateCodeByIphone" parameterType="com.zr.xuezhu.userLogin.pojo.UserLogin">
+        UPDATE userlogin SET verificationCode=#{verificationCode},
+                             updateTime = now()
+        WHERE iphone=#{iphone}
+    </update>
+    <update id="updateVerifyCodeById" parameterType="com.zr.xuezhu.userLogin.pojo.UserLogin">
+        UPDATE userlogin SET verificationCode=#{verificationCode},
+                             updateTime = now(),
+                             updateName = #{userName}
+        WHERE id = #{id}
+    </update>
+
+    <update id="quXiaoShenQing" parameterType="java.lang.Integer">
+        UPDATE paydivide SET status=2
+        WHERE loginId = #{loginId}
+    </update>
+    <update id="qianyue" parameterType="java.lang.Integer">
+        UPDATE paydivide SET status=6
+        WHERE loginId = #{loginId}
+    </update>
+
+
+</mapper>
+
+

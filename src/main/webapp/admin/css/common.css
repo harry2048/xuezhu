@@ -1,0 +1,43 @@
+html,body,div,a,ul,li,img,span,input,form,textarea,table,tr,td,h3{
+	margin: 0;
+	padding: 0;
+}
+a{
+	text-decoration: none;
+}
+a,span{
+	display: inline-block;
+}
+li{
+	list-style: none;
+}
+h3{
+	font-weight: normal;
+}
+.red{
+	color: red;
+}
+body{
+	overflow: hidden;
+	font-size: 12px;
+}
+.hide{
+	display: none;
+}
+input{
+	outline: none;
+}
+table{
+	border-top: 1px solid #eee;
+	border-left: 1px solid #eee;
+}
+td{
+	border-bottom: 1px solid #eee;
+	border-right: 1px solid #eee;
+}
+table tr:nth-child(even){
+	background: #fafafa;
+}
+table tr:hover{
+	background: #f1f1f1;
+}

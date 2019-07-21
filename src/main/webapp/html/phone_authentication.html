@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0,
+		minimum-scale=1.0, user-scalable=no">
+		<title>还款银行卡登记</title>
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/common.css">
+		<link rel="stylesheet" type="text/css" href="../css/public.css"/>
+		<link rel="stylesheet" href="../css/swiper.min.css">
+		<script src="../js/main.js"></script>
+		<script src="../js/jquery.js"></script>
+		<script src="../js/dyselect.js"></script>
+		<script src="../js/swiper.min.js"></script>
+		<script src="../js/rem-config.js"></script>
+		
+	</head>
+	<body>
+		<div class="tabbar">
+			<a href="mine.html" class="tabbar_r">
+				<img src="../images/x.png" >
+			</a>
+			<span>还款银行卡登记</span>
+			<a href="" class="tabbar_c">
+				<img src="../images/caidan.png" alt="">
+			</a>
+			<div class="clear"></div>
+		</div>
+		<div class="f_banner">
+			<img src="../images/banner.jpg" alt="">
+		</div>
+		<div class="progress_bar">
+			<div class="yellow"></div>
+			<div class="yellow"></div>
+			<div class="yellow"></div>
+			<div class="yellow"></div>
+			<div class="yellow"></div>
+			<div class="yellow"></div>
+			<div class="yellow"></div>
+			<div class="yellow"></div>
+			<div class="yellow"></div>
+		</div>
+		<div class="phone_content">
+			<ul>
+				<li>
+					<span>账 &nbsp; &nbsp;号 </span>
+					<input type="text" placeholder="银行卡账号" class="phone_num reg_yhk">
+				</li>
+				<li>
+					<span>开户行</span>
+					<div class="phone_yunying1 btn1">
+						<span class="reg_yinhang">选择银行</span>
+						<img src="../images/xiaosanjiao.png" alt="">
+					</div>
+				</li>
+				<li>
+					<span>手机号</span>
+					<input type="text" placeholder="请输入手机号" class="phone_num reg_phone">
+				</li>
+				<li>
+					<input type="text" placeholder="请输入4位短信验证码" class="phone_yanzhengma reg_yzm">
+					<div id="huoqu_yzm">获取验证码</div>
+				</li>
+			</ul>
+		</div>
+		<div class="btn_box">
+			<div id="pre_btn">上一步</div>
+			<div class="next_btn">下一步</div>
+		</div>
+		<div class="msg"></div>
+		<div class="dialog show1">
+			<div class="dialog_bg"></div>
+			<div class="dialog_info">
+				<ul id="marrSta">
+				</ul>
+				<a href="javascript:;" class="dialog_btn show1_cancle">取消</a>
+			</div>
+		</div>
+		<div class="select_box select_box1"></div>
+		
+		
+	</body>
+	<script>
+
+        // 下一页点击上一页
+        $(function () {
+            $("#pre_btn").click(function () {
+                window.location.href="live.html";
+            })
+            $.ajax({
+                url:appPath+"huankuan_dengji",
+                contentType: "application/json;charset=utf-8",
+                dataType:'json',//服务器返回json格式数据
+                type:'GET',//HTTP请求类型
+                success:function(data){
+                    if(data.success){
+                        var data = data.data;
+                        $('.reg_yhk').val(data.bankCardAccount);
+                        $('.reg_yinhang').text(data.openingBank);
+                        $('.reg_phone').val(data.bankPhone);
+                        $('.reg_yzm').val(data.verificationCode);
+                    }
+                }
+            });
+
+            // 获取验证码
+            $("#huoqu_yzm").click(function () {
+                var iphone = $(".reg_phone").val();
+                if(iphone == "") {
+                    alert("电话号码不能为空！")
+                    return false;
+                }
+                $.ajax({
+                    url: "http://localhost:8080/getVerificationCode",
+                    data: {"iphone":iphone},
+                    dataType: 'json',//服务器返回json格式数据
+                    type: 'GET',//HTTP请求类型
+                    success: function (data) {
+                        if (data.success) {
+                            $(".msg").show().text("验证码发送成功！");
+                        } else {
+                            $(".msg").show().text("验证码发送失败，请重新发送！");
+                        }
+                    }
+                })
+            })
+
+
+            $.ajax({
+                url:appPath+"kaihuhangDropdownBox",
+                data:"",
+                dataType:'json',//服务器返回json格式数据
+                type:'GET',//HTTP请求类型
+                success:function(res){
+                    if(res.success){
+                        var _list = res.data;
+                        var _li = "";
+                        for(var i = 0;i<_list.length;i++){
+                            _li+="<li li_id="+_list[i].key+">"+_list[i].value+"</li>";
+
+                        }
+                        $(".dialog.show1 ul").html(_li);
+
+                    }else{
+                        $(".msg").show().text("获取失败！原因"+_res.errorMessage);
+                        setTimeout(function(){
+                            $(".msg").hide("slow")
+                        },2000)
+                    }
+                }
+            });
+
+
+
+                $(".btn1").click(function () {
+                    $(".show1").show();
+                })
+                $(".show1_cancle").click(function () {
+                    $(".show1").hide();
+                })
+
+
+                // 获取文字再放上去
+                $(".dialog").on("click", "li", function () {
+                    var li_text = $(this).text();
+                    var li_id = $(this).attr("li_id")
+                    if ($(this).parent().parent().parent().hasClass("show1")) {
+                        $(".btn1 span").text(li_text);
+                        $(".btn1 span").attr("li_id", li_id);
+
+                    } else if ($(this).parent().parent().parent().hasClass("show2")) {
+                        $(".btn2 span").text(li_text);
+                        $(".btn2 span").attr("li_id", li_id);
+                    } else {
+                        $(".btn3 span").text(li_text);
+                        $(".btn3 span").attr("li_id", li_id);
+
+                    }
+                    $(".dialog").hide();
+                })
+                // 判断是否为空,并正则验证
+                $(".reg_yhk").blur(function () {
+                    if ($(this).val() == "") {
+                        $(".msg").show().text("不能为空");
+                        $(this).focus();
+                        setTimeout(function () {
+                            $(".msg").hide("slow")
+                        }, 2000)
+
+                        return false;
+                    } else {
+                        var _yhk = $(this).val();
+                        var myreg = /^([1-9]{1})(\d{14}|\d{18})$/;
+                        if (!myreg.test(_yhk)) {
+                            $(".msg").show().text("银行卡号不合法");
+                            setTimeout(function () {
+                                $(".msg").hide("slow")
+                            }, 2000);
+                            $(this).focus();
+                        }
+                    }
+                });
+                $(".reg_phone").blur(function () {
+                    if ($(this).val() == "") {
+                        $(".msg").show().text("不能为空");
+                        $(this).focus();
+                        setTimeout(function () {
+                            $(".msg").hide("slow")
+                        }, 2000)
+
+                        return false;
+                    } else {
+                        var _phone = $(this).val();
+                        var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+                        if (!myreg.test(_phone)) {
+                            $(".msg").show().text("手机号不合法");
+                            setTimeout(function () {
+                                $(".msg").hide("slow")
+                            }, 2000);
+                            $(this).focus();
+                        }
+                    }
+                });
+                $("reg_yzm").blur(function () {
+                    if ($(this).val() == "") {
+                        $(".msg").show().text("不能为空");
+                        $(this).focus();
+                        setTimeout(function () {
+                            $(".msg").hide("slow")
+                        }, 2000)
+
+                        return false;
+                    } else {
+                        var _yzm = $(this).val();
+                        var myreg = /^\d{4}$/;
+                        if (!myreg.test(_yzm)) {
+                            $(".msg").show().text("验证码不合法");
+                            setTimeout(function () {
+                                $(".msg").hide("slow")
+                            }, 2000);
+                            $(this).focus();
+                        }
+                    }
+                });
+
+                $('.next_btn').click(function () {
+                    var _yhk = $('.reg_yhk').val();
+                    var _yinhang = $('.reg_yinhang').attr("li_id");
+                    var _phone = $('.reg_phone').val();
+                    var _yzm = $('.reg_yzm').val();
+
+                    var _data = {
+                        "bankCardAccount": _yhk,
+                        "openingBank": _yinhang,
+                        "bankPhone": _phone,
+                        "verificationCode": _yzm
+                    }
+                    $.ajax({
+                        url: appPath+"repaymentBank",
+                        data: JSON.stringify(_data),
+                        contentType: "application/json;charset=utf-8",
+                        dataType: 'json',//服务器返回json格式数据
+                        type: 'post',//HTTP请求类型
+                        success: function (data) {
+                            if (data.success) {
+                                $('.msg').show().text("成功！1秒后跳转")
+                                setTimeout(function () {
+                                    window.location.href = "xuezhufenqi.html"
+                                }, 1000)
+                            } else {
+                                if (data.loginStatus == false) {
+                                    $(".msg").show().text("操作失败！" + data.errorMessage + "，即将跳转到登录页面~");
+                                    setTimeout(function () {
+                                        window.location.href = "login.html";
+                                        $(".msg").hide("slow")
+                                    }, 2000)
+                                } else {
+                                    $(".msg").show().text("操作失败！" + data.errorMessage);
+                                    setTimeout(function () {
+                                        $(".msg").hide("slow")
+                                    }, 2000)
+                                }
+                            }
+                        }
+                    });
+
+                })
+
+        })
+	</script>
+</html>

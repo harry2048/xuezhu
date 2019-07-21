@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0,
+		minimum-scale=1.0, user-scalable=no">
+		<title>温馨提示</title>
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/common.css">
+		<script src="../js/main.js"></script>
+		<script src="../js/rem-config.js"></script>
+		<script src="../js/jquery.js"></script>
+		<style>
+			.wxts_yaoqing{
+				width: 6rem;
+				height: .8rem;
+				border:0.02rem solid #ccc;
+				margin:1rem auto 0.5rem;
+				position: relative;
+			
+			}
+			.wxts_yaoqing input{
+				font-size:0.3rem;
+				position:absolute;
+				top:0.23rem;
+				left:0.2rem;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="examine_head">
+			<a href="mine.html">
+				<img src="../images/x.png" alt="" class="examine_head1">
+			</a>
+			<span class="examine_head1">温馨提示</span>
+			<img src="../images/caidan.png" alt=""  class="examine_head2">
+		</div>
+		<div class="wxts_logo">
+			<img src="../images/xz_logo.png" alt="" width="400" height="400">
+		</div>
+		<div class="wxts_yaoqing">
+			<input type="text" placeholder="请输入您的邀请码" class="reg_num">
+		</div>
+		<div class="wxts_btn">
+			开始申请
+		</div>
+		<div class="msg"></div>
+		
+	</body>
+	<script>
+		$(function(){
+			//判断是否为空,并正则验证
+			$('.reg_num').blur(function(){
+				if($(this).val() == ""){
+					$('.msg').show().text("邀请码不能为空");
+					$(this).focus()
+					setTimeout(function(){
+						$('.msg').hide('slow')
+					},2000)
+					return false;
+				}else{
+					var _num = $(this).val();
+					var myreg = /^\d{4}$/;
+					if(!myreg.test(_num)){
+						$('.msg').show().text("邀请码不合法");
+						setTimeout(function(){
+							$('.msg').hide("slow")
+						},2000);
+						$(this).focus()
+					}
+				}
+			});
+			$('.wxts_btn').click(function(){
+				var _num = $('.reg_num').val();
+				$.ajax({
+                    contentType: "application/json;charset=utf-8",
+					url:appPath+"inputInvitationCode",
+					data:{"inputInvitationCode":_num},
+					dataType:'json',//服务器返回json格式数据
+					type:'get',//HTTP请求类型
+					success:function(data){
+						if(data.success){
+							
+							$(".msg").show().text("操作成功！2秒后跳转页面");
+							setTimeout(function(){
+                                window.location.href="fqsq.html";
+							},1000);
+							
+						}else{
+							if(data.loginStatus==false) {
+                                $(".msg").show().text("操作失败！"+data.errorMessage+"，即将跳转到登录页面~");
+                                setTimeout(function(){
+                                    window.location.href="login.html";
+                                    $(".msg").hide("slow")
+                                },2000)
+                            }else {
+                                $(".msg").show().text("操作失败！"+data.errorMessage);
+                                setTimeout(function(){
+                                    $(".msg").hide("slow")
+                                },2000)
+							}
+
+						}
+					}
+				});
+			})
+		})
+	</script>
+	
+</html>

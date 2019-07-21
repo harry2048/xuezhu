@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="x5-orientation" content="portrait">
+		<meta name="x5-fullscreen" content="true">
+		<meta name="full-screen" content="yes">
+		<title>分期缴费申请</title>
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/Mdate.css">
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<script src="../js/main.js"></script>
+		<script src="../js/rem-config.js"></script>
+		<script src="../js/zepto.js"></script>
+		<script src="../js/Mdate.js"></script>
+		<script src="../js/iscroll.js"></script>
+	</head>
+	<body>
+		
+		<div class="tabbar">
+			<a href="mine.html" class="tabbar_r">
+				<img src="../images/x.png" >
+			</a>
+			<span>分期缴费申请</span>
+			<a href="" class="tabbar_c">
+				<img src="../images/caidan.png" alt="">
+			</a>
+			<div class="clear"></div>
+		</div>
+		<div class="f_banner" style="height:5rem;">
+			<img src="../images/banner.jpg" alt="">
+		</div>
+		<div class="progress_bar">
+		
+		</div>
+		<div class="fqsh_content">
+			<ul>
+				<li>
+					<span>我的课程</span>
+					<a href="javascript:;" class="login_kecheng">
+						<span>请选择</span>
+						<img src="../images/right.png" alt="">
+					</a>
+				</li>
+				<li>
+					<span>分期金额</span>
+					<a href="javascript:;">
+						<input type="text" placeholder="请输入分期金额" class="reg_jine">
+					</a>
+				</li>
+				<li>
+					<span>还款周期</span>
+					<a href="javascript:;" class="login">
+						<span>请选择</span>
+						<img src="../images/right.png" alt="">
+					</a>
+				</li>
+				<li>
+					<span>上课时间</span>
+					<a href="javascript:;" class="demo">
+						<!--<input type="text" id="dateSelectorOne" placeholder="选择日期" class="reg_time">-->
+						<!--<input type="date" id="huankuan_time" pattern="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" class="huankuan_time">-->
+						<input class="huankuan_time" type="date"/>
+					</a>
+				</li>
+				
+			</ul>
+		</div>
+		<div class="fqsh_nextbtn">下一步</div>
+		<div class="dialog kecheng">
+			<div class="dialog_bg"></div>
+			<div class="dialog_info">
+				<ul id="wdkc">
+					<!--<li>java开发工程师</li>
+					<li>java开发工程师</li>
+					<li>java全栈开发工程师</li>-->
+				</ul>
+				<a href="javascript:;" class="dialog_btn kecheng_cancle">取消</a>
+			</div>
+		</div>
+		<div class="dialog zhouqi">
+			<div class="dialog_bg"></div>
+			<div class="dialog_info">
+				<ul id="hkzq">
+					<!--<li>6+12个月</li>
+					<li>6+18个月</li>
+					<li>12个月</li>-->
+				</ul>
+				<a href="javascript:;" class="dialog_btn cancle">取消</a>
+			</div>
+		</div>	
+		<div class="msg"></div>
+	</body>	
+	<script src="../js/jquery.js"></script>
+	<script type="text/javascript">
+		new Mdate("dateSelectorOne");
+	</script>
+	<script>
+        // 下一页点击上一页
+        $(function () {
+            $.ajax({
+                url:"http://localhost:8080/getFqsq",
+                contentType: "application/json;charset=utf-8",
+                dataType:'json',//服务器返回json格式数据
+                type:'GET',//HTTP请求类型
+                success:function(data){
+                    if(data.success){
+                        var data = data.data;
+                        $('.login_kecheng').text(data.myCourse);
+                        $('.reg_jine').val(data.amountInstallments);
+                        $('.login').text(data.paymentCycle);
+                        $('.huankuan_time').val(data.classHours);
+                    }
+                }
+            });
+        })
+
+		// gengwei--点击我的课程，发送我的课程下拉框请求
+		$(".login_kecheng").click(function () {
+            $.ajax({
+                url:appPath+"kechengDropdownBox",
+                data:"", contentType: "application/json;charset=utf-8",
+                dataType:'json',//服务器返回json格式数据
+                type:'get',//HTTP请求类型
+                success:function(data){
+                    if(data.success){
+                        var _list = data.data;
+                        var _li = "";
+                        for(var i = 0;i<_list.length;i++){
+                            _li+="<li li_id="+_list[i].id+">"+_list[i].name+"</li>";
+                        }
+                        $(".dialog.kecheng ul").html(_li);
+                    }else{
+                        if(data.loginStatus==false) {
+                            $(".msg").show().text("操作失败！"+data.errorMessage+"，即将跳转到登录页面~");
+                            setTimeout(function(){
+                                window.location.href="login.html";
+                                $(".msg").hide("slow")
+                            },2000)
+                        }else {
+                            $(".msg").show().text("操作失败！"+data.errorMessage);
+                            setTimeout(function(){
+                                $(".msg").hide("slow")
+                            },2000)
+                        }
+                    }
+                }
+            });
+        })
+		// 为每个我的课程绑定点击事件
+        $("ul#wdkc").on("click","li",function(){
+			// 把我的课程下的span的‘请选择’替换为课程内容
+			$(".login_kecheng span").text($(this).text());
+			$(".login_kecheng").val($(this).attr("li_id"))
+            $(".kecheng").hide();
+        });
+
+
+		// 为还款周期添加下拉框点击事件
+        $(".login").click(function () {
+            $.ajax({
+                url:appPath+"huankuanDropdownBox",
+                data:"",
+				contentType: "application/json;charset=utf-8",
+                dataType:'json',//服务器返回json格式数据
+                type:'get',//HTTP请求类型
+                success:function(data){
+                    if(data.success){
+                        var _list = data.data;
+                        var _li = "";
+                        for(var i = 0;i<_list.length;i++){
+                            _li+="<li li_id="+_list[i].id+">"+_list[i].name+"</li>";
+                        }
+                        $(".dialog.zhouqi ul").html(_li);
+                    }else{
+                        if(data.loginStatus==false) {
+                            $(".msg").show().text("操作失败！"+data.errorMessage+"，即将跳转到登录页面~");
+                            setTimeout(function(){
+                                window.location.href="login.html";
+                                $(".msg").hide("slow")
+                            },2000)
+                        }else {
+                            $(".msg").show().text("操作失败！"+data.errorMessage);
+                            setTimeout(function(){
+                                $(".msg").hide("slow")
+                            },2000)
+                        }
+                    }
+                }
+            });
+        })
+        // 为每个还款周期绑定点击事件
+        $("ul#hkzq").on("click","li",function(){
+            // 把还款周期下的span的‘请选择’替换为还款周期
+            $(".login span").text($(this).text());
+            $(".login").val($(this).attr("li_id"))
+            $(".dialog").hide();
+        });
+
+
+		$(function() {
+			var li_text;
+			$(".login").click(function() {
+				$(".dialog").show();
+			})
+			$(".cancle").click(function() {
+				$(".dialog").hide();
+			})
+			$('.login_kecheng').click(function() {
+				$(".kecheng").show();
+			})
+			$('.kecheng_cancle').click(function() {
+                $(".kecheng").hide();
+            })
+			
+			// 获取文字再放上去
+			$(".dialog li").click(function() {
+				li_text = $(this).text();
+				if ($(this).parent().parent().parent().hasClass("kecheng")) {
+					//$(".login_kecheng span").text(li_text);
+					$.ajax({
+						url:appPath+"kechengDropdownBox",
+						data:"", contentType: "application/json;charset=utf-8",
+						dataType:'json',//服务器返回json格式数据
+						type:'get',//HTTP请求类型
+						success:function(data){
+							if(data.success){
+								var _list = data.data;
+								var _li = "";
+								for(var i = 0;i<_list.length;i++){
+									_li+="<li li_id="+_list[i].id+">"+_list[i].name+"</li>";
+
+								}
+								$(".dialog.kecheng ul").html(_li);
+
+							}else{
+								if(data.loginStatus==false) {
+									$(".msg").show().text("操作失败！"+data.errorMessage+"，即将跳转到登录页面~");
+									setTimeout(function(){
+										window.location.href="login.html";
+										$(".msg").hide("slow")
+									},2000)
+								}else {
+									$(".msg").show().text("操作失败！"+data.errorMessage);
+									setTimeout(function(){
+										$(".msg").hide("slow")
+									},2000)
+								}
+							}
+						}
+					});
+				} else {
+					// $(".login span").text(li_text);
+					$.ajax({
+						url:appPath+"huankuanDropdownBox",
+						data:"",
+                        contentType: "application/json;charset=utf-8",
+						dataType:'json',//服务器返回json格式数据
+						type:'get',//HTTP请求类型
+						success:function(data){
+							if(data.success){
+								var _list = data.data;
+								var _li = "";
+								for(var i = 0;i<_list.length;i++){
+									_li+="<li li_id="+_list[i].id+">"+_list[i].name+"</li>";
+									
+								}
+								$(".dialog.zhouqi ul").html(_li);
+								
+							}else{
+                                if(data.loginStatus==false) {
+                                    $(".msg").show().text("操作失败！"+data.errorMessage+"，即将跳转到登录页面~");
+                                    setTimeout(function(){
+                                        window.location.href="login.html";
+                                        $(".msg").hide("slow")
+                                    },2000)
+                                }else {
+                                    $(".msg").show().text("操作失败！"+data.errorMessage);
+                                    setTimeout(function(){
+                                        $(".msg").hide("slow")
+                                    },2000)
+                                }
+							}
+						}
+					});
+				}
+				$(".dialog").hide();
+			})
+			//点击事件,发送请求
+			$('.fqsh_nextbtn').click(function(){
+				var _kecheng = $('.login_kecheng').val();
+				var _jine = $('.reg_jine').val();
+				var _zhouqi = $('.login').val();
+				var _time = $('.huankuan_time').val();
+				var _data = {
+					"myCourse":_kecheng,
+					 "amountInstallments":_jine,
+					 "paymentCycle":_zhouqi,
+					 "classHours": _time
+				}
+
+				$.ajax({
+					url:appPath+"installmentApply",
+                    data:JSON.stringify(_data),
+                    contentType: "application/json;charset=utf-8",
+					dataType:'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型
+					success:function(data){
+						if(data.success){
+							$('.msg').show().text("成功！1秒后跳转")
+                            setTimeout(function(){
+                           		window.location.href="news.html";
+                                $(".msg").hide("slow")
+                            },2000)
+						}else{
+                            if(data.loginStatus==false) {
+                                $(".msg").show().text("操作失败！"+data.errorMessage+"，即将跳转到登录页面~");
+                                setTimeout(function(){
+                                    window.location.href="login.html";
+                                    $(".msg").hide("slow")
+                                },2000)
+                            }else {
+                                $(".msg").show().text("操作失败！"+data.errorMessage);
+                                setTimeout(function(){
+                                    $(".msg").hide("slow")
+                                },2000)
+                            }
+						}
+					},
+					
+				});
+				
+			})
+			
+			
+			
+		})
+	</script>
+
+</html>

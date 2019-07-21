@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta name="format-detection" content="telephone=no">
+		<meta name="x5-orientation" content="portrait">
+		<meta name="x5-fullscreen" content="true">
+		<meta name="full-screen" content="yes">
+		<title>我的订单</title>
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/Mdate.css">
+		<link rel="stylesheet" type="text/css" href="../css/common.css" />
+		<script src="../js/main.js"></script>
+		<script src="../js/rem-config.js"></script>
+		<script src="../js/zepto.js"></script>
+		<script src="../js/Mdate.js"></script>
+		<script src="../js/iscroll.js"></script>
+	</head>
+	<body>
+
+	</body>	
+	<script src="../js/jquery.js"></script>
+	<script>
+        $(function () {
+            $.ajax({
+                url:appPath+"myOrder",
+                contentType: "application/json;charset=utf-8",
+                dataType:'json',//服务器返回json格式数据
+                type:'GET',//HTTP请求类型
+                success:function(data){
+                    if(data.success){
+                        if (data.isShenHe==1){
+                            window.location.href="examine_yiqueren.html";
+                        }else if (data.isShenHe==3){
+                            window.location.href="qianyue.html";
+                        }else if (data.isShenHe==6){
+                            window.location.href="huankuan.html";
+                        }else{
+                            window.location.href="fqsq.html";
+						}
+                    }else {
+                        if(data.loginStatus==false) {
+                            $(".msg").show().text(""+data.errorMessage+"，即将跳转到登录页面~");
+                            setTimeout(function(){
+                                window.location.href="login.html";
+                                $(".msg").hide("slow")
+                            },2000)
+                        }else {
+                            $(".msg").show().text("操作失败！"+data.errorMessage);
+                            setTimeout(function(){
+                                $(".msg").hide("slow")
+                            },2000)
+                        }
+					}
+                }
+            });
+        })
+
+
+	</script>
+
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0,
+		minimum-scale=1.0, user-scalable=no">
+		<title>审核中</title>
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/common.css">
+		<script src="../js/rem-config.js"></script>
+		<script src="../js/main.js"></script>
+	</head>
+	<body>
+		<div class="examine_head">
+			<a href="mine.html">
+				<img src="../images/x.png" alt="" class="examine_head1">
+			</a>
+			<span class="examine_head1">审核中</span>
+			<img src="../images/caidan.png" alt=""  class="examine_head2">
+		</div>
+		<div class="load">
+			<img src="../images/loading.gif" /> 下拉刷新
+		</div>
+		<div class="examine_title">
+			<img src="../images/examine.jpg" alt="">
+		</div>
+		<div class="examine_jindu">
+			<div class="examine_hui">
+				<span>已申请</span>
+				<span>审核中</span>
+				<span>签约</span>
+				<span>还款</span>
+			</div>
+			<div class="examine_y">
+				<span>已申请</span>
+				<span>审核中</span>
+			</div>
+			<div class="yuanquan">
+				<span>审核中</span>
+			</div>
+		</div>
+		<div class="examine_content">
+			<ul>
+				<li>
+					<p><span>姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</span>张洪涛</p>
+				</li>
+				<li>
+					<p><span>分期金额：</span>39800元</p>
+				</li>
+				<li>
+					<p><span>课&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;程：</span>java开发工程师</p>
+				</li>
+				<li>
+					<p><span>还款方式：</span>6+18个月</p>
+				</li>
+				<li>
+					<p><span>手机号码：</span>182****0467</p>
+				</li>
+				<li>
+					<p><span>还款账户：</span>6212****5542</p>
+				</li>
+			</ul>
+		</div>
+
+	</body>
+	<script src="../js/zepto.js"></script>
+	<script>
+		$(function () {
+            var number=1;
+            var flag =true ;
+            $(window).scroll(function(){
+                console.log(111)
+                var scrollTop = $(this).scrollTop();
+                var scrollHeight = $(document).height();
+                var windowHeight = $(this).height();
+                //监听高度以及判断
+                if(scrollTop + windowHeight == scrollHeight){
+                    if(flag){
+                        //一个加载的图片,让别人觉得正在加载
+                        $(".load").show();
+                        $.ajax({
+                            url:appPath+"myOrder",
+                            contentType: "application/json;charset=utf-8",
+                            dataType:'json',//服务器返回json格式数据
+                            type:'GET',//HTTP请求类型
+                            success:function(data){
+                                if(data.success){
+                                    if (data.isShenHe==3){
+                                        window.location.href="qianyue.html";
+                                    }else if(data.isShenHe==1){
+                                        window.location.href="examine_yiqueren.html";
+                                    }
+                                }else {
+                                    if(data.loginStatus==false) {
+                                        $(".msg").show().text(""+data.errorMessage+"，即将跳转到登录页面~");
+                                        setTimeout(function(){
+                                            window.location.href="login.html";
+                                            $(".msg").hide("slow")
+                                        },2000)
+                                    }else {
+                                        $(".msg").show().text("操作失败！"+data.errorMessage);
+                                        setTimeout(function(){
+                                            $(".msg").hide("slow")
+                                        },2000)
+                                    }
+                                }
+                            }
+                        });
+
+                    }
+
+                }
+            });
+
+        })
+	</script>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0,
+		minimum-scale=1.0, user-scalable=no">
+		<title>影像资料</title>
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/common.css">
+		<script src="../js/rem-config.js"></script>
+		<script src="../js/jquery.js"></script>
+		<style>
+			/*蓝色按钮,绝对定位*/
+			.blueButton {
+				position: absolute;
+				top:0;
+				left:0;
+				display: block;
+				width: 3rem;
+				height: 0.5rem;
+				color: #000;
+				text-decoration: none;
+				text-align: center;
+				font: normal normal normal 0.3rem 'Microsoft YaHei';
+				cursor: pointer;
+			}
+			
+			.blueButton:hover {
+				text-decoration: none;
+			}
+			
+			/*自定义上传,位置大小都和a完全一样,而且完全透明*/
+			.myFileUpload {
+				position: absolute;
+				top:0;
+				left:0;
+				display: block;
+				width: 3rem;
+				height: 0.5rem;
+				opacity: 0;
+			}
+			
+			/*显示上传文件夹名的Div*/
+			.show {
+				position: absolute;
+				top:0.5rem;
+				width: 100%;
+				opacity: 0;
+				font: normal normal normal 14px/30px 'Microsoft YaHei';
+			}
+		</style>
+	</head>
+	<body>
+		<div class="tabbar">
+			<a href="mine.html" class="tabbar_r">
+				<img src="../images/x.png">
+			</a>
+			<span>影像资料</span>
+			<a href="" class="tabbar_c">
+				<img src="../images/caidan.png" alt="">
+			</a>
+			<div class="clear"></div>
+		</div>
+		<div class="f_banner">
+			<img src="../images/banner.jpg" alt="">
+		</div>
+		<div class="progress_bar">
+			<div class="yellow"></div>
+			<div class="yellow"></div>
+		</div>
+		<div class="mov_content">
+			<ul>
+				<li>
+					<img src="../images/s1.jpg" alt="" class="m_content_img">
+					<div class="m_content_font">
+						<a href="javascript:;" class="blueButton">上传身份证正面</a>
+						<input type="file" accept="image/*" mutiple="mutiple" capture="camera" class="myFileUpload"/>
+						<div class="show"></div>
+					</div>
+					<img src="../images/right.png" alt="" class="m_content_jt">
+				</li>
+				<li>
+					<img src="../images/s2.jpg" alt="" class="m_content_img">
+					<div class="m_content_font">
+						<a href="javascript:;" class="blueButton">上传身份证背面</a>
+						<input type="file" accept="image/*" mutiple="mutiple" capture="camera" class="myFileUpload"/>
+						<div class="show"></div>
+					</div>
+					<img src="../images/right.png" alt="" class="m_content_jt">
+				</li>
+				<li>
+						<img src="../images/s3.jpg" alt="" class="m_content_img">
+						<div class="m_content_font">
+							<a href="javascript:;" class="blueButton">手持身份证照片</a>
+							<input type="file" accept="image/*" mutiple="mutiple" capture="camera" class="myFileUpload"/>
+							<div class="show"></div>
+						</div>
+						<img src="../images/right.png" alt="" class="m_content_jt">
+				</li>
+				<li>
+						<img src="../images/s4.jpg" alt="" class="m_content_img">
+						<div class="m_content_font">
+							<a href="face.html" class="blueButton">视频认证</a>
+							<input type="">
+						</div>	
+						<img src="../images/right.png" alt="" class="m_content_jt">
+						
+				</li>
+				<li>
+						<img src="../images/s5.jpg" alt="" class="m_content_img">
+						<div class="m_content_font">
+							<a href="javascript:;" class="blueButton">上传培训合同</a>
+							<input type="file" accept="image/*" mutiple="mutiple" capture="camera" class="myFileUpload"/>
+							<div class="show"></div>
+						</div>
+						<img src="../images/right.png" alt="" class="m_content_jt">
+				</li>
+				<li>
+						<img src="../images/s6.jpg" alt="" class="m_content_img">
+						<div class="m_content_font">
+							<a href="javascript:;" class="blueButton">毕业证照/学信截图</a>
+							<input type="file" accept="image/*" mutiple="mutiple" capture="camera" class="myFileUpload"/>
+							<div class="show"></div>
+						</div>
+						<img src="../images/right.png" alt="" class="m_content_jt">
+				</li>
+			</ul>
+		</div>
+		<a href="mine.html">
+			<div class="yhk_btn">
+				提交
+			</div>
+		</a>
+		
+		
+		<script>
+			$(document).ready(function() {
+				$(".myFileUpload").change(function() {
+					var arrs = $(this).val().split('\\');
+					var filename = arrs[arrs.length - 1];
+					$(".show").html(filename);
+				});
+			});
+		</script>
+
+	</body>
+</html>

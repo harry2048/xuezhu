@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0,
+		minimum-scale=1.0, user-scalable=no">
+		<title>影像资料</title>
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/common.css">
+		<script src="../js/rem-config.js"></script>
+		<script src="../js/jquery.js"></script>
+		<style>
+			/*蓝色按钮,绝对定位*/
+			.blueButton {
+				position: absolute;
+				top:0;
+				left:0;
+				display: block;
+				width: 3rem;
+				height: 0.5rem;
+				color: #000;
+				text-decoration: none;
+				text-align: center;
+				font: normal normal normal 0.3rem 'Microsoft YaHei';
+				cursor: pointer;
+			}
+			
+			.blueButton:hover {
+				text-decoration: none;
+			}
+			
+			/*自定义上传,位置大小都和a完全一样,而且完全透明*/
+			.myFileUpload {
+				position: absolute;
+				top:0;
+				left:0;
+				display: block;
+				width: 3rem;
+				height: 0.5rem;
+				opacity: 0;
+			}
+			
+			/*显示上传文件夹名的Div*/
+			.show {
+				position: absolute;
+				top:0.5rem;
+				width: 100%;
+				opacity: 0;
+				font: normal normal normal 14px/30px 'Microsoft YaHei';
+			}
+		</style>
+	</head>
+	<body>
+		<div class="tabbar">
+			<a href="mine.html" class="tabbar_r">
+				<img src="../images/x.png">
+			</a>
+			<span>影像资料</span>
+			<a href="" class="tabbar_c">
+				<img src="../images/caidan.png" alt="">
+			</a>
+			<div class="clear"></div>
+		</div>
+		<div class="f_banner">
+			<img src="../images/banner.jpg" alt="">
+		</div>
+		<div class="progress_bar">
+			<div class="yellow"></div>
+			<div class="yellow"></div>
+		</div>
+		<div class="mov_content">
+			<ul>
+				<li>
+					<img src="../images/s1.jpg" alt="" class="m_content_img">
+					<div class="m_content_font reg_zhengmian">
+						<a href="javascript:;" class="blueButton">上传身份证正面</a>
+						<input type="file" class="myFileUpload"/>
+						<div class="show"></div>
+					</div>
+					<img src="../images/right.png" alt="" class="m_content_jt">
+				</li>
+				<li>
+					<img src="../images/s2.jpg" alt="" class="m_content_img">
+					<div class="m_content_font reg_beimian">
+						<a href="javascript:;" class="blueButton">上传身份证背面</a>
+						<input type="file" class="myFileUpload"/>
+						<div class="show"></div>
+					</div>
+					<img src="../images/right.png" alt="" class="m_content_jt">
+				</li>
+				<li>
+						<img src="../images/s3.jpg" alt="" class="m_content_img">
+						<div class="m_content_font reg_shouchi">
+							<a href="javascript:;" class="blueButton">手持身份证照片</a>
+							<input type="file" class="myFileUpload"/>
+							<div class="show"></div>
+						</div>
+						<img src="../images/right.png" alt="" class="m_content_jt">
+				</li>
+				<li>
+						<img src="../images/s4.jpg" alt="" class="m_content_img">
+						<div class="m_content_font reg_shipin">
+							<a href="face.html" class="blueButton">视频认证</a>
+							<input type="">
+						</div>	
+						<img src="../images/right.png" alt="" class="m_content_jt">
+						
+				</li>
+				<li>
+						<img src="../images/s5.jpg" alt="" class="m_content_img">
+						<div class="m_content_font reg_shangchuan">
+							<a href="javascript:;" class="blueButton">上传培训合同</a>
+							<input type="file" class="myFileUpload"/>
+							<div class="show"></div>
+						</div>
+						<img src="../images/right.png" alt="" class="m_content_jt">
+				</li>
+				<li>
+						<img src="../images/s6.jpg" alt="" class="m_content_img">
+						<div class="m_content_font reg_biyezheng">
+							<a href="javascript:;" class="blueButton">毕业证照/学信截图</a>
+							<input type="file" class="myFileUpload"/>
+							<div class="show"></div>
+						</div>
+						<img src="../images/right.png" alt="" class="m_content_jt">
+				</li>
+			</ul>
+		</div>
+		<div class="btn_box">
+			<a href="news.html">
+				<div>上一步</div>
+			</a>
+				<div class="next_btn">下一步</div>
+		</div>
+		<div class="msg"></div>
+		<script>
+			$(function(){
+				//获取摄像头
+				$(document).ready(function() {
+					$(".myFileUpload").change(function() {
+						var arrs = $(this).val().split('\\');
+						var filename = arrs[arrs.length - 1];
+						$(".show").html(filename);
+					});
+				});
+				//点击获取数据
+				$('.reg_zhengmian').change(function(){
+					var formdata=new FormData();
+                    formdata.append('multipartFile',$($(this).children()[1]).get(0).files[0]);
+					$.ajax({
+						url:"http://localhost:8080/import/idPositive",
+						data:formdata,
+						dataType:'json',//服务器返回json格式数据
+						type:'post',//HTTP请求类型
+						contentType:false,
+						processData:false,	//防止自动转换数据格式
+						success:function(res){
+							if(res.success){
+								$($('.reg_zhengmian').siblings()[0]).attr("src","http://localhost:8080/import/getImg?url="+res.data);
+								$('.msg').show().text("身份证正面图片上传成功");
+								setTimeout(function(){
+									$('.msg').hide('slow')
+								},1000)
+							}
+						},
+					});
+				});
+				$('.reg_beimian').click(function(){
+					$.ajax({
+						url:"http://localhost:8080/import/idOtherSide",
+						data:"",
+						dataType:'json',//服务器返回json格式数据
+						type:'post',//HTTP请求类型
+						success:function(data){
+							if(res.isSuccess){
+								$('.msg').show().text("身份证背面图片上传成功")
+								setTimeout(function(){
+									$('.msg').hide('slow')
+								},1000)
+							}
+						},
+					});
+				});
+				$('.reg_shouchi').click(function(){
+					$.ajax({
+						url:"http://localhost:8080/import/phoneIdPicture",
+						data:"",
+						dataType:'json',//服务器返回json格式数据
+						type:'post',//HTTP请求类型
+						success:function(data){
+							if(res.isSuccess){
+								$('.msg').show().text("手持身份证上传成功")
+								setTimeout(function(){
+									$('.msg').hide('slow')
+								},1000)
+							}
+						},
+					});
+				});
+				$('.reg_shipin').click(function(){
+					$.ajax({
+						url:"http://localhost:8080/import/videoAuthentication",
+						data:"",
+						dataType:'json',//服务器返回json格式数据
+						type:'post',//HTTP请求类型
+						success:function(data){
+							if(res.isSuccess){
+								$('.msg').show().text("视频认证成功")
+								setTimeout(function(){
+									$('.msg').hide('slow')
+								},1000)
+							}
+						},
+					});
+				});
+				$('.reg_shangchuan').click(function(){
+					$.ajax({
+						url:"http://localhost:8080/import/trainingContract",
+						data:"",
+						dataType:'json',//服务器返回json格式数据
+						type:'post',//HTTP请求类型
+						success:function(data){
+							if(res.isSuccess){
+								$('.msg').show().text("上传培训合同成功")
+								setTimeout(function(){
+									$('.msg').hide('slow')
+								},1000)
+							}
+						},
+					});
+				});
+				$('.reg_biyezheng').click(function(){
+					$.ajax({
+						url:"http://localhost:8080/import/diploma",
+						data:"",
+						dataType:'json',//服务器返回json格式数据
+						type:'post',//HTTP请求类型
+						success:function(data){
+							if(res.success){
+								$('.msg').show().text("上传毕业证成功")
+								setTimeout(function(){
+									$('.msg').hide('slow')
+								},1000)
+							}
+						},
+					});
+				})
+				
+				$('.next_btn').click(function(){
+                    window.location.href="live.html";
+				})
+
+
+			})
+		</script>
+
+	</body>
+</html>

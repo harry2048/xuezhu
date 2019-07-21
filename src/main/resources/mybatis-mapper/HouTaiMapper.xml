@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zr.xuezhu.jigou.mapper.HouTaiMapper">
+
+    <update id="updateStatus" parameterType="com.zr.xuezhu.paydivide.pojo.PayDivide">
+        UPDATE paydivide SET status=1,updateTime=#{updateTime},updateName=#{updateName} where id=#{id}
+    </update>
+    <update id="updateStatus2" parameterType="com.zr.xuezhu.paydivide.pojo.PayDivide">
+        UPDATE paydivide SET status=2,updateTime=#{updateTime},updateName=#{updateName} where id=#{id}
+    </update>
+    <select id="queryById" parameterType="java.lang.Integer"
+            resultType="com.zr.xuezhu.paydivide.pojo.PayDivide">
+        SELECT
+            pv.orderNum,
+            pv.createTime,
+            pv. NAME,
+            uf.phone,
+            pv.STATUS,
+            pv.amountSettlements,
+            pv.myCourse,
+            pv.paymentCycle,
+            pv.idCode,
+            pv.paymentAccount,
+            pv.backBank,
+            up.bankCardAccount
+        FROM paydivide pv
+        LEFT JOIN userinfo uf ON pv.loginId = uf.loginId
+        LEFT JOIN userrepay up ON up.loginId = pv.loginId
+        where pv.id=#{id}
+    </select>
+
+    <select id="queryPage" parameterType="com.zr.xuezhu.jigou.pojo.HouTaiSelectVo"
+            resultType="com.zr.xuezhu.paydivide.pojo.PayDivide">
+        SELECT
+        pv.id,
+        pv. NAME,
+        pv.createTime,
+        pv.amountSettlements,
+        pv.myCourse,
+        pv.STATUS,
+        uf.phone
+        FROM paydivide pv
+        LEFT JOIN userinfo uf ON pv.loginId = uf.loginId
+        <where>
+            <if test="startTime!=null and startTime!=''">
+                and pv.startTime=#{startTime}
+            </if>
+            <if test="name!=null and name!=''">
+                and pv.name=#{name}
+            </if>
+            <if test="orderNum!=null and orderNum!=''">
+                and pv.orderNum=#{orderNum}
+            </if>
+            and pv.status=0
+        </where>
+        limit #{offset},#{pageSize}
+    </select>
+
+    <!--总条数-->
+    <select id="queryCount" parameterType="com.zr.xuezhu.jigou.pojo.HouTaiSelectVo"
+            resultType="java.lang.Integer">
+        select count(*)
+        FROM paydivide pv
+        LEFT JOIN userinfo uf ON pv.loginId = uf.loginId
+        <where>
+            <if test="startTime!=null and startTime!=''">
+                and pv.startTime=#{startTime}
+            </if>
+            <if test="name!=null and name!=''">
+                and pv.name=#{name}
+            </if>
+            <if test="orderNum!=null and orderNum!=''">
+                and pv.orderNum=#{orderNum}
+            </if>
+            and pv.status=0
+        </where>
+    </select>
+
+</mapper>
+
+

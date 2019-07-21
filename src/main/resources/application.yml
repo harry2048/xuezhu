@@ -1,0 +1,22 @@
+server:
+  port: 80
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/operate_platform2?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+    username: root
+    password: root
+  redis:
+    host: localhost
+    port: 6379
+  # jackson:
+  #   default-property-inclusion: non_null
+mybatis:
+  mapper-locations: classpath:mybatis-mapper/*Mapper.xml
+
+ftp:
+  ip: 192.168.199.128
+  port: 21
+  username: ftpuser1
+  password: 123456
+  basePath: /home/ftpuser1/

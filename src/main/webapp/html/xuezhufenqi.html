@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0,
+		minimum-scale=1.0, user-scalable=no">
+    <title>雪竹分期</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/common.css">
+    <script src="../js/main.js"></script>
+    <script src="../js/rem-config.js"></script>
+    <script src="../js/jquery.js"></script>
+</head>
+<body>
+<div class="examine_head">
+    <a href="mine.html">
+        <img src="../images/x.png" alt="" class="examine_head1">
+    </a>
+    <span class="examine_head1">雪竹分期</span>
+    <img src="../images/caidan.png" alt="" class="examine_head2">
+</div>
+<div class="xzfq_box">
+    <div class="xzfq_content">
+        <div class="xzfq_detail">
+            <ul>
+                <li>
+                    <p>结款金额</p>
+                    <a href="javascript:;" class="reg_jine"><!--￥39800--></a>
+                </li>
+                <li>
+                    <p>收款账户</p>
+                    <a href="javascript:;" class="reg_zh"><!--中软云际（北京）--></a>
+                </li>
+                <li>
+                    <p>起止时间<span>*</span></p>
+
+                    <a href="javascript:;" class="reg_qztime"><!--2019/07/24-2021/06/24--></a>
+                </li>
+                <li>
+                    <p>首次还款日<span>*</span></p>
+
+                    <a href="javascript:;" class="reg_btime"><!--07月24日--></a>
+                </li>
+                <li>
+                    <p>借款人姓名</p>
+                    <a href="javascript:;" class="reg_name"><!--张洪涛--></a>
+                </li>
+                <li>
+                    <p>借款人身份证</p>
+                    <a href="javascript:;" class="reg_iCode"><!--1410***********--></a>
+                </li>
+                <li>
+                    <p>还款日<span>*</span></p>
+                    <a href="javascript:;" class="reg_hk"><!--每月25日--></a>
+                </li>
+                <li>
+                    <p>借款期限</p>
+                    <a href="javascript:;" class="reg_qixian"><!--24个月（期）--></a>
+                </li>
+                <li>
+                    <p>默认还款账户</p>
+                    <a href="javascript:;" class="reg_bank"><!--工商银行(5542)--></a>
+                </li>
+                <li>
+                    <p>授权协议</p>
+                    <a href="javascript:;" class="reg_shouquan"><!--雪竹分期个人信息授权函--></a>
+                </li>
+                <li>
+                    <p>借款用途</p>
+                    <a href="javascript:;" class="reg_yongtu"><!--java开发工程师--></a>
+                </li>
+
+                <li id="xzfq_font">
+                    <span>*</span>预计时间，最终从实际合同时间为准
+                </li>
+            </ul>
+        </div>
+        <div class="xzfq_footer">
+            <div class="xzfq_footer_left">
+
+            </div>
+            <div class="xzfq_footer_right">
+                <p>本人已仔细阅读并完全理解，接受如下文件，愿意受该文件约束：<span>《个人信用报告查询与上报授权书》</span>、<span>《信息授权函》</span></p>
+            </div>
+        </div>
+        <div class="xzfq_btn">
+            <div class="xzfq_btn1" style="color:#f8ba41">返回</div>
+            <div class="xzfq_btn2">
+                确认申请
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="msg"></div>
+</body>
+<script>
+
+    function fenqixinxi(data) {
+        $(".reg_jine").text("￥" + data.amountInstallments); $(".reg_jine").attr("jine",data.amountInstallments)   // 还款金额
+        $(".reg_zh").text(data.paymentAccount); // 收款银行
+        $(".reg_qztime").text(data.startTime); // 起止日期
+        $(".reg_btime").text(data.firstPayMentDate); // 首次还款
+        $(".reg_name").text(data.name); // 借款人姓名
+        $(".reg_qixian").text(data.paymentCycle); // 还款周期
+        $(".reg_bank").text(data.backBank); // 还款银行
+        $(".reg_shouquan").text(data.agreement); //授权书
+        $(".reg_yongtu").text(data.myCourse); // 用途
+        $(".reg_hk").text(data.payMentDate); // 每月还款日
+        $(".reg_iCode").text(data.idCode); // 借款人身份证号
+
+    }
+
+    $(function () {
+        $.ajax({
+            url: appPath+"xueZhuFenQi",
+            data: "",
+            dataType: 'json',//服务器返回json格式数据
+            type: 'get',//HTTP请求类型
+            success: function (data) {
+                if (data.success) {
+                    // 赋值
+                    fenqixinxi(data.data);
+                } else {
+                    if (data.loginStatus == false) {
+                        $(".msg").show().text("操作失败！" + data.errorMessage + "，即将跳转到登录页面~");
+                        setTimeout(function () {
+                            window.location.href = "login.html";
+                            $(".msg").hide("slow")
+                        }, 2000)
+                    } else {
+                        $(".msg").show().text("操作失败！" + data.errorMessage);
+                        setTimeout(function () {
+                            $(".msg").hide("slow")
+                        }, 2000)
+                    }
+                }
+            }
+        })
+    })
+
+
+    $(function () {
+        // 勾变色
+        $('.xzfq_footer_left').addClass('bg1')
+        $('.xzfq_footer_left').click(function () {
+            $(this).toggleClass('bg1').toggleClass('bg2')
+        })
+        // 点击发送请求
+        $(".xzfq_btn2").click(function () {
+            var reg_jine = $('.reg_jine').attr("jine")
+            var reg_zh = $('.reg_zh').text()
+            var reg_qztime = $('.reg_qztime').text()
+            var reg_btime = $('.reg_btime').text()
+            var reg_name = $('.reg_name').text()
+            var reg_qixian = $('.reg_qixian').text()
+            var reg_bank = $('.reg_bank').text()
+            var reg_shouquan = $('.reg_shouquan').text()
+            var reg_yongtu = $('.reg_yongtu').text()
+            var reg_hk = $('.reg_hk').text()
+            var reg_iCode = $('.reg_iCode').text()
+
+
+            var _data = {
+                "amountInstallments": reg_jine,
+                "paymentAccount": reg_zh,
+                "paymentCycle": reg_qixian,
+                "myCourse": reg_yongtu,
+                "startTime": reg_qztime,
+                "firstPayMentDate": reg_btime,
+                "name": reg_name,
+                "idCode": reg_iCode,
+                "payMentDate": reg_hk,
+                "backBank": reg_bank,
+                "agreement": reg_shouquan
+            }
+            $.ajax({
+                url: appPath+"xueZhuFenQiAdd",
+                data:JSON.stringify(_data),
+                contentType: "application/json;charset=utf-8",
+                dataType: 'json',//服务器返回json格式数据
+                type: 'POST',//HTTP请求类型
+                success: function (data) {
+                    if (data.success) {
+                        $('.msg').show().text('成功！1秒跳转页面')
+                        setTimeout(function () {
+                            window.location.href = "examine.html"
+                        }, 1000)
+
+                    } else {
+                        if(data.loginStatus==false) {
+                            $(".msg").show().text("操作失败！"+data.errorMessage+"，即将跳转到登录页面~");
+                            setTimeout(function(){
+                                window.location.href="login.html";
+                                $(".msg").hide("slow")
+                            },2000)
+                        }else {
+                            $(".msg").show().text("操作失败！"+data.errorMessage);
+                            setTimeout(function(){
+                                $(".msg").hide("slow")
+                            },2000)
+                        }
+                    }
+                }
+
+            });
+        });
+    })
+
+
+</script>
+</html>

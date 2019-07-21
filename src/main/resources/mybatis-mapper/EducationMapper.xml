@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zr.xuezhu.Live.mapper.EducationMapper">
+
+
+    <update id="updateEduByLoginId" parameterType="com.zr.xuezhu.Live.bean.Education">
+        UPDATE useredu SET occupation=#{occupation},
+                            education=#{education},
+                            graduationSchool=#{graduationSchool},
+                            major=#{major},
+                            graduationYear=#{graduationYear},
+                            updateTime=now(),
+                            updateName=#{updateName}
+        WHERE loginId = #{loginId}
+    </update>
+</mapper>
+
+

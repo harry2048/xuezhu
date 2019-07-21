@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zr.xuezhu.paydivide.mapper.PayDivideMapper">
+    <insert id="insert" parameterType="com.zr.xuezhu.paydivide.pojo.PayDivideAddVo">
+        INSERT INTO paydivide
+        VALUES(NULL,
+                #{loginId},
+                0,
+                #{amountInstallments},
+                #{paymentAccount},
+                #{startTime},
+                #{firstPayMentDate},
+                #{name},
+                #{idCode},
+                #{payMentDate},
+                #{paymentCycle},
+                #{backBank},
+                #{agreement},
+                #{myCourse},
+                #{orderNum},
+                0,
+                now(),
+                #{createName},
+                now(),
+                #{createName}
+                )
+    </insert>
+    <update id="updateFenQi" parameterType="com.zr.xuezhu.paydivide.pojo.PayDivideAddVo">
+        UPDATE paydivide SET amountSettlements = #{amountSettlements},
+                            paymentAccount = #{paymentAccount},
+                            startTime = #{startTime},
+                            firstPayMentDate = #{firstPayMentDate},
+                            name = #{name},
+                            idCode = #{idCode},
+                            payMentDate = #{payMentDate},
+                            paymentCycle = #{paymentCycle},
+                            backBank = #{backBank},
+                            agreement = #{agreement},
+                            myCourse = #{myCourse},
+                            updateTime = now(),
+                            updateName = #{updateName}
+        WHERE loginId = #{loginId} and payOffStatus=0
+    </update>
+    <select id="queryPage" parameterType="java.lang.Integer" resultType="com.zr.xuezhu.paydivide.pojo.PayDivideDTO">
+        SELECT DISTINCT
+            p.amountInstallments,
+            p.paymentCycle,
+            p.classHours,
+            p.myCourse,
+            u.`name`,
+            u.idCode,
+            r.bankCardAccount,
+            r.openingBank
+        FROM
+            paymentInformation p
+            LEFT JOIN userInfo u ON u.loginId = p.loginId
+            LEFT JOIN userRepay r ON r.loginId = p.loginId
+        WHERE
+            p.loginId = #{id} and p.payOffStatus=0
+    </select>
+    <!--<select id="queryByLoginId" parameterType="java.lang.Integer" resultType="com.zr.xuezhu.paydivide.pojo.PayDivideAddVo">
+        SELECT *
+        FROM paydivide
+        WHERE loginId = #{loginId} and payOffStatus=0
+    </select>-->
+    <select id="queryStatusByLoginId" parameterType="java.lang.Integer" resultType="com.zr.xuezhu.paydivide.pojo.PayDivide">
+        SELECT *
+        FROM paydivide
+        WHERE loginId = #{id} and payOffStatus=0
+    </select>
+
+</mapper>
+
+

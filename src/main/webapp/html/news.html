@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0,
+		minimum-scale=1.0, user-scalable=no">
+		<title>基本信息</title>
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/common.css">
+		<script src="../js/main.js"></script>
+		<script src="../js/rem-config.js"></script>
+		
+	</head>
+	<body>
+		<div class="tabbar">
+			<a href="mine.html" class="tabbar_r">
+				<img src="../images/x.png" >
+			</a>
+			<span>基本信息</span>
+			<a href="" class="tabbar_c">
+				<img src="../images/caidan.png" alt="">
+			</a>
+			<div class="clear"></div>
+		</div>
+		<div class="f_banner">
+			<img src="../images/banner.jpg" alt="">
+		</div>
+		<div class="progress_bar">
+			<div class="yellow"></div>
+		</div>
+		<div class="jb_content">
+			<ul>
+				<li>
+					<div class="jb_content_title">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</div>
+					<input type="text" placeholder="请输入姓名" class="jb_content_pl reg_name">
+				</li>
+				<li>
+					<div class="jb_content_title">身份证号</div>
+					<input type="text" placeholder="请输入身份证号" class="jb_content_pl reg_sfz">
+				</li>
+				<li>
+					<div class="jb_content_title">手机号码</div>
+					<input type="text" placeholder="请输入手机号码" class="jb_content_pl reg_phone">
+				</li>
+				<li>
+					<div class="jb_content_title">QQ号码</div>
+					<input type="text" placeholder="请输入QQ号码" class="jb_content_pl reg_qq">
+				</li>
+				
+			</ul>
+		</div>
+		<div class="btn_box">
+			<div id="pre_btn">上一步</div>
+			<div class="next_btn">下一步</div>
+		</div>
+		<div class="msg"></div>
+	</body>
+	<script src="../js/jquery.js"></script>
+	<script>
+		// 下页点击上一页
+		$(function () {
+		    $("#pre_btn").click(function () {
+                window.location.href="fqsq.html";
+            })
+
+
+            $.ajax({
+                url:appPath+"getNews",
+                contentType: "application/json;charset=utf-8",
+                dataType:'json',//服务器返回json格式数据
+                type:'GET',//HTTP请求类型
+                success:function(data){
+                    if(data.success){
+                        var data = data.data;
+                        $('.reg_name').val(data.name);
+                        $('.reg_sfz').val(data.idCode);
+                        $('.reg_phone').val(data.phone);
+                        $('.reg_qq').val(data.qqCode);
+                    }
+                }
+            });
+        })
+
+
+		$(function(){
+			//判断是否为为空,并正则验证
+			$('.reg_name').blur(function(){
+				if($(this).val() == ""){
+					$('.msg').show().text("姓名不能为空");
+					$(this).focus();
+					setTimeout(function(){
+						$('.msg').hide("slow")
+					},2000)
+					return false;
+				}
+			});
+			$(".reg_sfz").blur(function(){
+				if($(this).val()==""){
+					$(".msg").show().text("不能为空");
+					$(this).focus();
+					setTimeout(function(){
+						$(".msg").hide("slow")
+					},2000)
+					
+					return false;
+				}else{
+					var _sfz = $(this).val();
+					
+					var myreg=/^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+					if(!myreg.test(_sfz)){
+						$(".msg").show().text("身份证号不合法");
+						setTimeout(function(){
+							$(".msg").hide("slow")
+						},2000);
+						$(this).focus();
+					}
+				}
+			});   
+			$('.reg_phone').blur(function(){
+				if($(this).val() == ""){
+					$('.msg').show().test("手机号不能为空");
+					$(this).focus()
+					setTimeout(function(){
+						$('.msg').hide("slow")
+					},2000)
+					return false
+				}else{
+					var _phone = $(this).val();
+					var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+					if(!myreg.test(_phone)){
+						$('.msg').show().text("手机号不合法");
+						setTimeout(function(){
+							$('.msg').hide("slow")
+						},2000)
+						$(this).focus()
+					}
+				}
+			});
+			$('.reg_qq').blur(function(){
+				if($(this).val() == ""){
+					$('.msg').show().text("QQ号不能为空");
+					$(this).focus()
+					setTimeout(function(){
+						$('.msg').hide("slow")
+					},2000)
+					return false
+				}else{
+					var _QQ = $(this).val();
+					var myreg =  /^[1-9][0-9]{4,9}$/gim;
+					if(!myreg.test(_QQ)){
+						$('.msg').show().text("QQ号不合法")
+						setTimeout(function(){
+							$('.msg').hide("slow")
+						},2000)
+						$(this).focus()
+					}
+				}
+			})
+			$('.next_btn').click(function(){
+				var _name = $('.reg_name').val();
+				var _sfz = $('.reg_sfz').val();
+				var _phone = $('.reg_phone').val();
+				var _QQ = $('.reg_qq').val();
+				var _data = {
+					"name":_name,
+					"idCode":_sfz,
+					"phone":_phone,
+					"qqCode":_QQ
+				}
+				$.ajax({
+					url:appPath+"essentialInformation",
+                    data:JSON.stringify(_data),
+                    contentType: "application/json;charset=utf-8",
+					dataType:'json',//服务器返回json格式数据
+					type:'post',//HTTP请求类型
+					success:function(data){
+						if(data.success){
+							$(".msg").show().text("下一步！1秒后跳转页面");
+							setTimeout(function(){
+								window.location.href="movie_data.html";
+							},1000);
+							
+						}else{
+                            if(data.loginStatus==false) {
+                                $(".msg").show().text("操作失败！"+data.errorMessage+"，即将跳转到登录页面~");
+                                setTimeout(function(){
+                                    window.location.href="login.html";
+                                    $(".msg").hide("slow")
+                                },2000)
+                            }else {
+                                $(".msg").show().text("操作失败！"+data.errorMessage);
+                                setTimeout(function(){
+                                    $(".msg").hide("slow")
+                                },2000)
+                            }
+						}
+					}
+				});
+			})
+		})
+
+	</script>
+</html>
